@@ -1,0 +1,320 @@
+SQL> select * from employees;
+
+        ID NAME              AGE ADDRESS        SALARY
+---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000
+         2 Suresh             22 Kanpur          27000
+         3 Mahesh             24 Ghaziabad       29000
+         4 Chandan            25 Noida           31000
+         5 Alex               21 Paris           33000
+         6 Sunita             20 Delhi           35000
+
+6 rows selected.
+
+SQL> select * from employees;
+
+        ID NAME              AGE ADDRESS        SALARY
+---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000
+         2 Suresh             22 Kanpur          27000
+         3 Mahesh             24 Ghaziabad       29000
+         4 Chandan            25 Noida           31000
+         5 Alex               21 Paris           33000
+         6 Sunita             20 Delhi           35000
+
+6 rows selected.
+
+SQL> select * from employee;
+
+        ID NAME       DESIG
+---------- ---------- ----------
+         1 ABi
+         2 Anup
+         3 Bindu
+         4 Bharath
+
+SQL> select * from employees;
+
+        ID NAME              AGE ADDRESS        SALARY
+---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000
+         2 Suresh             22 Kanpur          27000
+         3 Mahesh             24 Ghaziabad       29000
+         4 Chandan            25 Noida           31000
+         5 Alex               21 Paris           33000
+         6 Sunita             20 Delhi           35000
+
+6 rows selected.
+
+SQL> alter table employees modify(name varchar(10), Address varchar(10));
+
+Table altered.
+
+SQL> alter table employees add(Desig varchar(10));
+
+Table altered.
+
+SQL> select * from employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000
+         2 Suresh             22 Kanpur          27000
+         3 Mahesh             24 Ghaziabad       29000
+         4 Chandan            25 Noida           31000
+         5 Alex               21 Paris           33000
+         6 Sunita             20 Delhi           35000
+
+6 rows selected.
+
+SQL> update employees set desig='Developer' where id=1;
+
+1 row updated.
+
+SQL> update employees set desig='Developer' where id=3;
+
+1 row updated.
+
+SQL> update employees set desig='Developer' where id=5;
+
+1 row updated.
+
+SQL> update employees set desig='Manager' where id=2;
+
+1 row updated.
+
+SQL> update employees set desig='Manager' where id=4;
+
+1 row updated.
+
+SQL> update employees set desig='Clerk' where id=6;
+
+1 row updated.
+
+SQL> select * from employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 Developer
+         2 Suresh             22 Kanpur          27000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+         6 Sunita             20 Delhi           35000 Clerk
+
+6 rows selected.
+
+SQL> update employees set desig='CEO' where id=1;
+
+1 row updated.
+
+SQL> select * from employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 CEO
+         2 Suresh             22 Kanpur          27000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+         6 Sunita             20 Delhi           35000 Clerk
+
+6 rows selected.
+
+SQL> create user suresh identified by tiger;
+
+User created.
+
+SQL> connect suresh/tiger;
+ERROR:
+ORA-01045: user SURESH lacks CREATE SESSION privilege; logon denied
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> connect system/tiger;
+Connected.
+SQL> grant CREATE SESSION to suresh;
+
+Grant succeeded.
+
+SQL> connect suresh/tiger;
+Connected.
+SQL> select * from employees;
+select * from employees
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> select * from system.employees;
+select * from system.employees
+                     *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> connect system/tiger;
+Connected.
+SQL> grant select to suresh on employees;
+grant select to suresh on employees
+             *
+ERROR at line 1:
+ORA-00969: missing ON keyword
+
+
+SQL> grant select  on employees to suresh;
+
+Grant succeeded.
+
+SQL> connect suresh/tiger;
+Connected.
+SQL> select * from system.employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 CEO
+         2 Suresh             22 Kanpur          27000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+         6 Sunita             20 Delhi           35000 Clerk
+
+6 rows selected.
+
+SQL> delete from system.employees where id=6;
+delete from system.employees where id=6
+                   *
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+SQL> connect system/tiger;
+Connected.
+SQL> grant select,delete  on employees to suresh;
+
+Grant succeeded.
+
+SQL> connect suresh/tiger;
+Connected.
+SQL> select * from system.employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 CEO
+         2 Suresh             22 Kanpur          27000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+         6 Sunita             20 Delhi           35000 Clerk
+
+6 rows selected.
+
+SQL> delete from system.employees where id=6;
+
+1 row deleted.
+
+SQL> update system.employee set salary=50000 where id=2;
+update system.employee set salary=50000 where id=2
+                           *
+ERROR at line 1:
+ORA-00904: "SALARY": invalid identifier
+
+
+SQL> connect system/tiger;
+Connected.
+SQL> grant select,delete,update  on employees to suresh;
+
+Grant succeeded.
+
+SQL> connect suresh/tiger;
+Connected.
+SQL> select * from system.employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 CEO
+         2 Suresh             22 Kanpur          27000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+
+SQL> update system.employee set salary=50000 where id=2;
+update system.employee set salary=50000 where id=2
+                           *
+ERROR at line 1:
+ORA-00904: "SALARY": invalid identifier
+
+
+SQL> update system.employees set salary=50000 where id=2;
+
+1 row updated.
+
+SQL> select * from system.employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 CEO
+         2 Suresh             22 Kanpur          50000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+
+SQL> alter table system.employees add(Pn int);
+alter table system.employees add(Pn int)
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+SQL> connect system/tiger;
+Connected.
+SQL> grant all to suresh;
+grant all to suresh
+      *
+ERROR at line 1:
+ORA-01919: role 'ALL' does not exist
+
+
+SQL> grant all privileges to suresh;
+
+Grant succeeded.
+
+SQL> connect suresh/tiger;
+Connected.
+SQL> select * from system.employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG
+---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 CEO
+         2 Suresh             22 Kanpur          50000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+
+SQL> alter table system.employees add(Pn int);
+
+Table altered.
+
+SQL> select * from system.employees;
+
+        ID NAME              AGE ADDRESS        SALARY DESIG              PN
+---------- ---------- ---------- ---------- ---------- ---------- ----------
+         1 Ramesh             23 Allahabad       25000 CEO
+         2 Suresh             22 Kanpur          50000 Manager
+         3 Mahesh             24 Ghaziabad       29000 Developer
+         4 Chandan            25 Noida           31000 Manager
+         5 Alex               21 Paris           33000 Developer
+
+SQL> connect system/tiger;
+Connected.
+SQL> revoke  all privileges from suresh;
+
+Revoke succeeded.
+
+SQL> connect suresh/tiger;
+ERROR:
+ORA-01045: user SURESH lacks CREATE SESSION privilege; logon denied
+
+
+Warning: You are no longer connected to ORACLE.
+SQL>
